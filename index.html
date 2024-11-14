@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>MAiTO Game coming in future...</title>
+    <title>MAiTO Drop</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <style>
         /* CSS สำหรับจัดสไตล์เกมขั้นต้น */
@@ -87,7 +87,7 @@
     </style>
 </head>
 <body>
-    <h1>MAiTO Game coming in future...</h1>
+    <h1>MAiTO Drop</h1>
     <div id="game">
         <div id="score-display">Score: 0</div> <!-- แสดงคะแนนที่มุมขวาบน -->
         <div id="timer-display">Time: 60s</div> <!-- แสดงเวลาที่มุมซ้ายบน -->
@@ -173,12 +173,12 @@
 
             gameArea.appendChild(enemy);
 
-            // ฟังก์ชันทำให้ตัวร้ายวิ่งลงมา
+            // ฟังก์ชันทำให้ตัวร้ายวิ่งลงมา โดยลดความเร็วลง 20%
             const interval = setInterval(() => {
                 const enemyTop = parseFloat(enemy.style.top);
 
-                // เลื่อนตัวร้ายลงในแนวตรง
-                enemy.style.top = `${enemyTop + 5}px`;
+                // ลดความเร็วลง 20% (จาก `+5` เป็น `+4`)
+                enemy.style.top = `${enemyTop + 4}px`;
 
                 // ตรวจสอบว่าตัวร้ายพ้นจอด้านล่างหรือไม่
                 if (enemyTop > window.innerHeight * 0.7) {
