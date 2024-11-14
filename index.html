@@ -142,12 +142,19 @@
             }, 1000);
         }
 
+        // ฟังก์ชันลบศัตรูทั้งหมด
+        function removeAllEnemies() {
+            const enemies = document.querySelectorAll('.enemy');
+            enemies.forEach(enemy => enemy.remove());
+        }
+
         // ฟังก์ชันเริ่มเกมใหม่
         function restartGame() {
             score = 0; // รีเซ็ตคะแนน
             timeLeft = 60; // รีเซ็ตเวลา
             updateScore();
             updateTime();
+            removeAllEnemies(); // ลบศัตรูทั้งหมดที่ยังอยู่บนหน้าจอ
             gameOverScreen.style.display = 'none';
             startGame();
         }
