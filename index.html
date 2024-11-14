@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MAiTO Game coming in future...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <style>
+        /* CSS สำหรับจัดสไตล์เกมขั้นต้น */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        #game {
+            width: 100vw;
+            height: 100vh; /* ปรับความสูงเป็นเต็มจอ */
+            margin: 0 auto;
+            position: relative;
+            background-image: url('images/background.png');
+            background-size: cover;
+            background-position: center;
+            border: 2px solid #fff;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .enemy {
+            width: 10vw;
+            height: 10vw;
+            position: absolute;
+            top: 0;
+            background-image: url('images/enemy.png');
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+        }
+        #score-display {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+        }
+        #timer-display {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+        }
+        #game-over {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #start-screen {
+            display: flex;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+    <h1>MAiTO Game coming in future...</h1>
+    <div id="game">
+        <div id="score-display">Score: 0</div> <!-- แสดงคะแนนที่มุมขวาบน -->
+        <div id="timer-display">Time: 60s</div> <!-- แสดงเวลาที่มุมซ้ายบน -->
+    </div>
+    <div id="start-screen">
+        <button class="button" onclick="initializeGame()">Start Game</button> <!-- ปุ่มเริ่มเกม -->
+    </div>
+    <div id="game-over" style="display: none;">
+        <h2>Play Again</h2>
+        <p>Your Score: <span id="final-score">0</span></p>
+        <button class="button" onclick="restartGame()">Play Again</button>
+    </div>
+
+    <script>
+        let score = 0; // คะแนนเริ่มต้น
+        let timeLeft = 60; // เวลาเริ่มต้น
+        const scoreDisplay = document.getElementById('score-display');
+        const timerDisplay = document.getElementById('timer-display');
+        const gameOverScreen = document.getElementById('game-over');
+        const finalScoreDisplay = document.getElementById('final-score');
+        const startScreen = document.getElementById('start-screen');
+        const gameArea = document.getElementById('game');
+        let gameInterval;
+        let timerInterval;
+
+        // ฟังก์ชันอัปเดตคะแนน
+        function updateScore() {
+            scoreDisplay.textContent = `Score: ${score}`;
+        }
+
+        // ฟังก์ชันอัปเดตเวลา
+        function updateTime() {
+            timerDisplay.textContent = `Time: ${timeLeft}s`;
+        }
+
+        // ฟังก์ชันจบเกมเมื่อเวลาหมด
+        function endGame() {
+            clearInterval(gameInterval); // หยุดการสร้างตัวร้าย
+            clearInterval(timerInterval); // หยุดจับเวลา
+            finalScoreDisplay.textContent = score; // แสดงคะแนนสุดท้าย
+            gameOverScreen.style.display = 'flex'; // แสดงหน้าจอ Play Again
+        }
+
+        // ฟังก์ชันเริ่มจับเวลาถอยหลัง
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTime();
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        // ฟังก์ชันเริ่มเกมใหม่
+        function restartGame() {
+            score = 0; // รีเซ็ตคะแนน
+            timeLeft = 60; // รีเซ็ตเวลา
+            updateScore();
+            updateTime();
+            gameOverScreen.style.display = 'none';
+            startGame();
+        }
+
+        // ฟังก์ชันสำหรับการสร้างตัวร้าย
+        function spawnEnemy() {
+            const enemy = document.createElement('div');
+            enemy.classList.add('enemy');
+
+            // เว้นระยะห่างจากขอบซ้ายและขวาของหน้าจอ
+            const screenWidth = window.innerWidth;
+            const enemyWidth = screenWidth * 0.1;
+            const randomX = Math.random() * (screenWidth - enemyWidth * 2) + enemyWidth;
+            enemy.style.left = `${randomX}px`;
+            enemy.style.top = '0';
+
+            gameArea.appendChild(enemy);
+
+            // ฟังก์ชันทำให้ตัวร้ายวิ่งลงมา
+            const interval = setInterval(() => {
+                const enemyTop = parseFloat(enemy.style.top);
+
+                // เลื่อนตัวร้ายลงในแนวตรง
+                enemy.style.top = `${enemyTop + 5}px`;
+
+                // ตรวจสอบว่าตัวร้ายพ้นจอด้านล่างหรือไม่
+                if (enemyTop > window.innerHeight * 0.7) {
+                    enemy.remove();
+                    clearInterval(interval);
+                }
+            }, 20);
+
+            // ฟังก์ชันตรวจสอบการสัมผัสตัวร้ายและคลิกเมาส์
+            function handleInteraction() {
+                score += 1; // เพิ่มคะแนน
+                updateScore(); // อัปเดตการแสดงผลคะแนน
+                enemy.remove(); // ลบตัวร้ายเมื่อถูกสัมผัสหรือคลิก
+                clearInterval(interval);
+            }
+
+            enemy.addEventListener('touchstart', handleInteraction); // รองรับการสัมผัส
+            enemy.addEventListener('click', handleInteraction); // รองรับการคลิก
+        }
+
+        // ฟังก์ชันเริ่มเกม
+        function startGame() {
+            updateScore();
+            updateTime();
+            startTimer(); // เริ่มจับเวลา
+            function spawnEnemyWithRandomDelay() {
+                spawnEnemy();
+                const randomDelay = Math.random() * 900 + 100;
+                gameInterval = setTimeout(spawnEnemyWithRandomDelay, randomDelay); // เรียก spawnEnemy ด้วยดีเลย์สุ่ม
+            }
+            spawnEnemyWithRandomDelay();
+        }
+
+        // ฟังก์ชันเริ่มเกมครั้งแรก
+        function initializeGame() {
+            startScreen.style.display = 'none'; // ซ่อนหน้าจอเริ่มต้น
+            startGame(); // เริ่มเกมครั้งแรก
+        }
+    </script>
+</body>
+</html>
