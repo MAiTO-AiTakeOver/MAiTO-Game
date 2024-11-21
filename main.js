@@ -160,7 +160,7 @@ const serverUrl = "https://your-server.com/submit-score"; // แทนที่�
         // เพิ่มปุ่ม "Your SOL Address for Airdrop"
         const solButton = this.add.text(
             this.scale.width / 2,
-            this.scale.height / 2.5 + 450,
+            this.scale.height / 2.5 + 350,
             'Add Your\n\nSOL Wallet\n\nfor Airdrop\n\n(Coming soon)',
             {
                 fontSize: '16px',
@@ -247,7 +247,7 @@ function update() {
 
 // ฟังก์ชันสร้างท่อ
 function addPipe() {
-    const gap = this.scale.height * 0.26; // ช่องว่างระหว่างท่อ
+    const gap = this.scale.height * 0.25; // ช่องว่างระหว่างท่อ
     const minPipeY = this.scale.height * 0.2; // ความสูงต่ำสุดของท่อบน
     const maxPipeY = this.scale.height - gap - this.scale.height * 0.2; // ความสูงสูงสุดของท่อบน
 
