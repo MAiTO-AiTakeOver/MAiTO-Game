@@ -160,7 +160,7 @@ const serverUrl = "https://your-server.com/submit-score"; // แทนที่�
         // เพิ่มปุ่ม "Your SOL Address for Airdrop"
         const solButton = this.add.text(
             this.scale.width / 2,
-            this.scale.height / 2.5 + 350,
+            this.scale.height / 2.5 + 250,
             'Add Your\n\nSOL Wallet\n\nfor Airdrop\n\n(Coming soon)',
             {
                 fontSize: '16px',
